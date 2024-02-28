@@ -1,13 +1,25 @@
 package com.example.advweek4.viewmodel
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.advweek4.model.Student
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
-class ListViewModel : ViewModel() {
+class ListViewModel(application: Application) : AndroidViewModel(application) {
     val studentLD = MutableLiveData<ArrayList<Student>>()
     val studentLoadErrorLD = MutableLiveData<Boolean>()
     val LoadingLD = MutableLiveData<Boolean>()
+
+    val TAG = "volleyTag"
+    private var queue:RequestQueue? = null
 
     fun refresh() {
         studentLD.value = arrayListOf(
@@ -34,6 +46,25 @@ class ListViewModel : ViewModel() {
             )
         )
         studentLoadErrorLD.value = false
-        LoadingLD.value = false
+        LoadingLD.value = true
+
+        queue = Volley.newRequestQueue(getApplication())
+        val url = "http://adv.jitusolution.com/student.php"
+
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            {
+
+//                if success, set loading progress live data to false
+                LoadingLD.value = false
+                Log.d("showvolley", it)
+            },
+            {
+//                if failed, show error message, set error live data to true and progress live data to false
+                Log.d("showvolley", it.toString())
+                studentLoadErrorLD.value = true
+                LoadingLD.value = false
+            }
+        )
     }
 }

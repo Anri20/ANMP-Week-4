@@ -42,7 +42,6 @@ class StudentListAdapter(val studentList: ArrayList<Student>) :
                 birthDate = studentList[position].bod.toString(),
                 phone = studentList[position].phone.toString(),
                 imgUrl = studentList[position].photoUrl.toString()
-
             )
             Navigation.findNavController(it).navigate(action)
         }

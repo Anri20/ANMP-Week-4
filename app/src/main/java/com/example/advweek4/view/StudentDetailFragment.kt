@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.advweek4.R
+import com.example.advweek4.viewmodel.DetailViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
 
@@ -18,6 +21,8 @@ class StudentDetailFragment : Fragment() {
     private lateinit var txtName: TextInputEditText
     private lateinit var txtBod: TextInputEditText
     private lateinit var txtPhone: TextInputEditText
+
+    private lateinit var detailViewModel: DetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,19 +41,36 @@ class StudentDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//        super.onViewCreated(view, savedInstanceState)
 
-        arguments.let {
-            txtID.text = StudentDetailFragmentArgs.fromBundle(requireArguments()).studentId.toEditable()
-            txtName.text = StudentDetailFragmentArgs.fromBundle(requireArguments()).studentName.toEditable()
-            txtBod.text = StudentDetailFragmentArgs.fromBundle(requireArguments()).birthDate.toEditable()
-            txtPhone.text = StudentDetailFragmentArgs.fromBundle(requireArguments()).phone.toEditable()
+//        arguments.let {
+//            txtID.setText(StudentDetailFragmentArgs.fromBundle(requireArguments()).studentId)
+//            txtName.setText(StudentDetailFragmentArgs.fromBundle(requireArguments()).studentName)
+//            txtBod.setText(StudentDetailFragmentArgs.fromBundle(requireArguments()).birthDate)
+//            txtPhone.setText(StudentDetailFragmentArgs.fromBundle(requireArguments()).phone)
+//
+//            Picasso.get()
+//                .load(StudentDetailFragmentArgs.fromBundle(requireArguments()).imgUrl)
+//                .into(imageView2)
+//        }
 
-            Picasso.get()
-                .load(StudentDetailFragmentArgs.fromBundle(requireArguments()).imgUrl)
-                .into(imageView2)
-        }
+        detailViewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        detailViewModel.fetch()
+
+        observeViewModel()
     }
 
-    fun String.toEditable() : Editable = Editable.Factory.getInstance().newEditable(this)
+    private fun observeViewModel() {
+        detailViewModel.studentLD.observe(viewLifecycleOwner, Observer {
+            txtID.setText(it.id)
+            txtName.setText(it.name)
+            txtBod.setText(it.bod)
+            txtPhone.setText(it.phone)
+
+            Picasso.get()
+                .load(it.photoUrl)
+                .into(imageView2)
+        })
+    }
+
 }

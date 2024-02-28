@@ -7,9 +7,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advweek4.R
 import com.example.advweek4.model.Student
+import com.squareup.picasso.Picasso
+import javax.security.auth.callback.Callback
 
 class StudentListAdapter(val studentList: ArrayList<Student>) :
     RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
@@ -33,9 +36,20 @@ class StudentListAdapter(val studentList: ArrayList<Student>) :
 
 
         holder.view.findViewById<Button>(R.id.btnDetail).setOnClickListener {
-            val action = StudentListFragmentDirections.actionStudentDetail()
+            val action = StudentListFragmentDirections.actionStudentDetail(
+                studentId = studentList[position].id.toString(),
+                studentName = studentList[position].name.toString(),
+                birthDate = studentList[position].bod.toString(),
+                phone = studentList[position].phone.toString(),
+                imgUrl = studentList[position].photoUrl.toString()
+
+            )
             Navigation.findNavController(it).navigate(action)
         }
+
+        Picasso.get()
+            .load(studentList[position].photoUrl)
+            .into(holder.view.findViewById<ImageView>(R.id.imageView))
     }
 
     fun updateStudentList(newStudentList: ArrayList<Student>){

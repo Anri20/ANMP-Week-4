@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.advweek4.R
 import com.example.advweek4.model.Student
+import com.example.advweek4.util.loadImage
 import com.squareup.picasso.Picasso
-import javax.security.auth.callback.Callback
 
 class StudentListAdapter(val studentList: ArrayList<Student>) :
     RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
@@ -46,9 +46,12 @@ class StudentListAdapter(val studentList: ArrayList<Student>) :
             Navigation.findNavController(it).navigate(action)
         }
 
-        Picasso.get()
-            .load(studentList[position].photoUrl)
-            .into(holder.view.findViewById<ImageView>(R.id.imageView))
+//        Picasso.get()
+//            .load(studentList[position].photoUrl)
+//            .into(holder.view.findViewById<ImageView>(R.id.imageStudentPhoto))
+
+        holder.view.findViewById<ImageView>(R.id.imageStudentPhoto)
+            .loadImage(studentList[position].photoUrl, holder.view.findViewById(R.id.progressBar))
     }
 
     fun updateStudentList(newStudentList: ArrayList<Student>){

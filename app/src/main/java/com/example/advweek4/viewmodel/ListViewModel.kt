@@ -19,7 +19,7 @@ class ListViewModel(application: Application) : AndroidViewModel(application) {
     val LoadingLD = MutableLiveData<Boolean>()
 
     val TAG = "volleyTag"
-    private var queue:RequestQueue? = null
+    private var queue: RequestQueue? = null
 
     fun refresh() {
 //        studentLD.value = arrayListOf(

@@ -2,6 +2,7 @@ package com.example.advweek4.view
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.advweek4.R
+import com.example.advweek4.util.loadImage
 import com.example.advweek4.viewmodel.DetailViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
@@ -23,6 +25,8 @@ class StudentDetailFragment : Fragment() {
     private lateinit var txtPhone: TextInputEditText
 
     private lateinit var detailViewModel: DetailViewModel
+
+    private lateinit var student_id: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +58,12 @@ class StudentDetailFragment : Fragment() {
 //                .into(imageView2)
 //        }
 
+        arguments.let{
+            student_id = StudentDetailFragmentArgs.fromBundle(requireArguments()).studentId
+        }
+
         detailViewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        detailViewModel.fetch()
+        detailViewModel.fetch(student_id = student_id)
 
         observeViewModel()
     }

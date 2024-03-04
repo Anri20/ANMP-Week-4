@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.advweek4.R
@@ -15,6 +17,10 @@ import com.example.advweek4.util.loadImage
 import com.example.advweek4.viewmodel.DetailViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class StudentDetailFragment : Fragment() {
     private lateinit var view: View
@@ -23,6 +29,7 @@ class StudentDetailFragment : Fragment() {
     private lateinit var txtName: TextInputEditText
     private lateinit var txtBod: TextInputEditText
     private lateinit var txtPhone: TextInputEditText
+    private lateinit var btnNotif: Button
 
     private lateinit var detailViewModel: DetailViewModel
 
@@ -40,6 +47,7 @@ class StudentDetailFragment : Fragment() {
         txtName = view.findViewById(R.id.txtName)
         txtBod = view.findViewById(R.id.txtBod)
         txtPhone = view.findViewById(R.id.txtPhone)
+        btnNotif = view.findViewById(R.id.btnNotif)
 
         return view
     }
@@ -78,6 +86,18 @@ class StudentDetailFragment : Fragment() {
             Picasso.get()
                 .load(it.photoUrl)
                 .into(imageView2)
+
+            var student = it
+
+            btnNotif.setOnClickListener{
+                Observable.timer(3, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe{
+                        Log.d("delay", "five seconds delay")
+                        MainActivity.showNotification(student.name.toString(), "Notification created for ${student.name.toString()}", R.drawable.baseline_person_24)
+                    }
+            }
         })
     }
 

@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.advweek4.R
+import com.example.advweek4.util.createNotificationChannel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -105,5 +106,7 @@ class MainActivity : AppCompatActivity() {
             .subscribe({
                 Log.d("delay", "delay of five seconds")
             })
+
+        createNotificationChannel(this, NotificationManagerCompat.IMPORTANCE_DEFAULT, false, getString(R.string.app_name), "App notification channel")
     }
 }

@@ -21,7 +21,6 @@ class StudentListFragment : Fragment() {
     private lateinit var recView: RecyclerView
     private lateinit var txtError: TextView
     private lateinit var progressLoad: ProgressBar
-    private lateinit var refreshLayout: SwipeRefreshLayout
 
     private lateinit var viewModel: ListViewModel
     private val studentListAdapter = StudentListAdapter(arrayListOf())
@@ -36,7 +35,6 @@ class StudentListFragment : Fragment() {
         recView = view.findViewById(R.id.recView)
         txtError = view.findViewById(R.id.txtError)
         progressLoad = view.findViewById(R.id.progressLoad)
-        refreshLayout = view.findViewById(R.id.refreshLayout)
 
         return view
     }
@@ -49,14 +47,6 @@ class StudentListFragment : Fragment() {
         recView.adapter = studentListAdapter
 
         observeViewModel()
-
-        refreshLayout.setOnRefreshListener {
-            recView.visibility = View.GONE
-            txtError.visibility = View.GONE
-            progressLoad.visibility = View.VISIBLE
-            viewModel.refresh()
-            refreshLayout.isRefreshing = false
-        }
     }
 
     private fun observeViewModel() {

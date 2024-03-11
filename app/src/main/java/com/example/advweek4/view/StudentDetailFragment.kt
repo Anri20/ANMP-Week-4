@@ -66,7 +66,7 @@ class StudentDetailFragment : Fragment() {
 //                .into(imageView2)
 //        }
 
-        arguments.let{
+        arguments.let {
             student_id = StudentDetailFragmentArgs.fromBundle(requireArguments()).studentId
         }
 
@@ -89,13 +89,17 @@ class StudentDetailFragment : Fragment() {
 
             var student = it
 
-            btnNotif.setOnClickListener{
+            btnNotif.setOnClickListener {
                 Observable.timer(3, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe{
+                    .subscribe {
                         Log.d("delay", "five seconds delay")
-                        MainActivity.showNotification(student.name.toString(), "Notification created for ${student.name.toString()}", R.drawable.baseline_person_24)
+                        MainActivity.showNotification(
+                            student.name.toString(),
+                            "Notification created for ${student.name.toString()}",
+                            R.drawable.baseline_person_24
+                        )
                     }
             }
         })

@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
     app:startDestination="@id/studentListFragment">
-
     <fragment
         android:id="@+id/studentListFragment"
         android:name="com.example.advweek4.view.StudentListFragment"
-        android:label="fragment_student_list"
-        tools:layout="@layout/fragment_student_list" >
+        android:label="Student List"
+        tools:layout="@layout/fragment_student_list">
         <action
             android:id="@+id/actionStudentDetail"
-            app:destination="@id/studentDetailFragment"
+            app:destination="@id/studentDetailFragment2"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
             app:popUpTo="@id/studentListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/studentDetailFragment"
+        android:id="@+id/studentDetailFragment2"
         android:name="com.example.advweek4.view.StudentDetailFragment"
-        android:label="fragment_student_detail"
-        tools:layout="@layout/fragment_student_detail" >
+        android:label="Student Detail" >
         <argument
             android:name="student_id"
             app:argType="string" />

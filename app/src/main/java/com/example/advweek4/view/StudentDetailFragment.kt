@@ -9,10 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.advweek4.R
+import com.example.advweek4.databinding.FragmentStudentDetailBinding
+import com.example.advweek4.model.Student
 import com.example.advweek4.util.loadImage
 import com.example.advweek4.viewmodel.DetailViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -22,16 +26,9 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class StudentDetailFragment : Fragment() {
-    private lateinit var view: View
-    private lateinit var imageView2: ImageView
-    private lateinit var txtID: TextInputEditText
-    private lateinit var txtName: TextInputEditText
-    private lateinit var txtBod: TextInputEditText
-    private lateinit var txtPhone: TextInputEditText
-    private lateinit var btnNotif: Button
-
+class StudentDetailFragment : Fragment(), UpdateStudentListener, NotifStudentListener {
     private lateinit var detailViewModel: DetailViewModel
+    private lateinit var dataBinding: FragmentStudentDetailBinding
 
     private lateinit var student_id: String
 
@@ -40,19 +37,15 @@ class StudentDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_student_detail, container, false)
+        dataBinding = FragmentStudentDetailBinding.inflate(inflater, container, false)
 
-        imageView2 = view.findViewById(R.id.imageView2)
-        txtID = view.findViewById(R.id.txtID)
-        txtName = view.findViewById(R.id.txtName)
-        txtBod = view.findViewById(R.id.txtBod)
-        txtPhone = view.findViewById(R.id.txtPhone)
-        btnNotif = view.findViewById(R.id.btnNotif)
-
-        return view
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        dataBinding.updateListener = this
+        dataBinding.notifListener = this
+
 //        super.onViewCreated(view, savedInstanceState)
 
 //        arguments.let {
@@ -78,31 +71,50 @@ class StudentDetailFragment : Fragment() {
 
     private fun observeViewModel() {
         detailViewModel.studentLD.observe(viewLifecycleOwner, Observer {
-            txtID.setText(it.id)
-            txtName.setText(it.name)
-            txtBod.setText(it.bod)
-            txtPhone.setText(it.phone)
-
-            Picasso.get()
-                .load(it.photoUrl)
-                .into(imageView2)
-
-            var student = it
-
-            btnNotif.setOnClickListener {
-                Observable.timer(3, TimeUnit.SECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        Log.d("delay", "five seconds delay")
-                        MainActivity.showNotification(
-                            student.name.toString(),
-                            "Notification created for ${student.name.toString()}",
-                            R.drawable.baseline_person_24
-                        )
-                    }
-            }
+            dataBinding.student = it
+//            txtID.setText(it.id)
+//            txtName.setText(it.name)
+//            txtBod.setText(it.bod)
+//            txtPhone.setText(it.phone)
+//
+//            Picasso.get()
+//                .load(it.photoUrl)
+//                .into(imageView2)
+//
+//            var student = it
+//
+//            btnNotif.setOnClickListener {
+//                Observable.timer(3, TimeUnit.SECONDS)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe {
+//                        Log.d("delay", "five seconds delay")
+//                        MainActivity.showNotification(
+//                            student.name.toString(),
+//                            "Notification created for ${student.name.toString()}",
+//                            R.drawable.baseline_person_24
+//                        )
+//                    }
+//            }
         })
     }
 
+    override fun onUpdateStudentClick(view: View) {
+        Toast.makeText(view.context, "Student Detail Updated", Toast.LENGTH_SHORT).show()
+        Navigation.findNavController(view).popBackStack()
+    }
+
+    override fun onNotifClick(view: View, student: Student) {
+        Observable.timer(3, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.d("delay", "three seconds delay")
+                MainActivity.showNotification(
+                    student.name.toString(),
+                    "Notification created for ${student.name.toString()}",
+                    R.drawable.baseline_person_24
+                )
+            }
+    }
 }

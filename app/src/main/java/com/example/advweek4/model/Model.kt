@@ -3,12 +3,12 @@ package com.example.advweek4.model
 import com.google.gson.annotations.SerializedName
 
 data class Student(
-    val id: String?,
+    var id: String?,
     @SerializedName("student_name")
-    val name: String?,
+    var name: String?,
     @SerializedName("birth_of_date")
-    val bod: String?, // date of birth
-    val phone: String?,
+    var dob: String?, // date of birth
+    var phone: String?,
     @SerializedName("photo_url")
-    val photoUrl: String?,
+    var photoUrl: String?,
 )

@@ -17,7 +17,7 @@ import com.example.advweek4.util.loadImage
 import com.squareup.picasso.Picasso
 
 class StudentListAdapter(val studentList: ArrayList<Student>) :
-    RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>() {
+    RecyclerView.Adapter<StudentListAdapter.StudentViewHolder>(), StudentDetailClickListener {
     class StudentViewHolder(var view: StudentListItemBinding) : RecyclerView.ViewHolder(view.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
@@ -35,6 +35,7 @@ class StudentListAdapter(val studentList: ArrayList<Student>) :
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
         with(holder.view){
             student = studentList[position]
+            detailListener = this@StudentListAdapter
         }
         /*holder.view.findViewById<TextView>(R.id.txtID).text = studentList[position].id
         holder.view.findViewById<TextView>(R.id.txtName).text = studentList[position].name
@@ -63,5 +64,17 @@ class StudentListAdapter(val studentList: ArrayList<Student>) :
         studentList.clear()
         studentList.addAll(newStudentList)
         notifyDataSetChanged()
+    }
+
+    override fun onStudentDetailClick(
+        view: View,
+        studentId: String,
+        studentName: String,
+        birthDate: String,
+        phone: String,
+        imgURL: String
+    ) {
+        val action = StudentListFragmentDirections.actionStudentDetail(studentId, studentName, birthDate, phone, imgURL)
+        Navigation.findNavController(view).navigate(action)
     }
 }
